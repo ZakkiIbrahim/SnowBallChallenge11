@@ -1,0 +1,112 @@
+
+.Overskrift{
+	color: #4D4B4C;
+	text-align: center;
+	font-family: Garamond, sans-serif;
+	font-size: 3.5em;
+    margin: auto;
+    background-color: #30E171;
+    padding: 20px;
+
+}
+.overskriftBackground {
+background-color: #30E171;
+}
+
+
+.Underskrift {
+    text-align: center;
+    font-family: Garamond, sans-serif;
+    font-size: 1.5em;
+    background-color: White;
+
+
+}
+.body1 {
+background-color: #EADDDD;
+padding-bottom: 500px;
+margin:auto;
+}
+
+.body2 {
+background-color: #EADDDD;
+padding-bottom: 150px;
+margin:auto;
+}
+
+.navbar {
+    text-align: center;
+    background-color: White;
+}
+.navbar a {
+	text-align: center;
+	color: White;
+    font-family: Garamond, sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    padding-right: 50px;
+    background-color: #30E171;
+    text-decoration: none;D
+    border:10px;
+    margin: auto;
+    border-color: #30E171;
+}
+
+.navbar a:hover {
+	background-color: #EADDDD;
+    color: Black;
+    border: 3px;
+    border-color: #30E171 ;
+}
+
+.navbar a.active {
+background-color: #EADDDD;
+color: Black;
+}
+
+.OmossTekst{
+    color: #4D4B4C;
+    text-align: left;
+    font-family: Source Sans Pro, sans-serif;
+    line-height:1.5;
+    /*border: solid 2px #30E171;*/
+    width: 400px;
+    padding: 10px;
+    
+}
+
+#Tekstdiv{
+    padding-top: 30px;
+}
+
+.Img {
+    position: absolute;
+    left: 450px;
+    padding-top: 40px;
+    width: 50px
+}
+.Img2 {
+    position: absolute;
+    right: 50px;
+    padding-top: 40px;
+}
+
+.logo {
+    position: absolute;
+    left: 100px;
+    top: 15px;
+    padding: 0px;
+}
+
+.text {
+    color: #4D4B4C;
+    text-align: left;
+    font-family: Source Sans Pro, sans-serif;
+    line-height:1.5;
+    /*border: solid 2px #30E171 ;*/
+    width: 400px;
+    position: absolute;
+    left: 30px;
+    margin-top: 40px;
+
+}

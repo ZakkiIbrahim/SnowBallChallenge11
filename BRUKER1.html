@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head>
+	<title>Bruker</title>
+	<meta charset="utf-8">
+
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.3.0/css/foundation-flex.min.css">
+	<link rel="stylesheet" type="text/css" href="Snowball.css">
+	
+
+<style>
+	body {
+		max-width: 800px;
+		margin: auto;
+		padding: 10px;
+		background-image: url("");
+		background-size: cover;t
+	}
+	textarea {
+		border: 3px solid black;
+		resize: none;
+	}
+	table {
+		background-color: black;
+	}
+</style>
+</head>
+<body>
+    <div class = "overskriftBackground"> 
+		<h1 class = "Overskrift">Organisasjonen RestMat</h1> 
+		<img src="RestMat.jpg" style="max-width:100%;height:auto;">		
+    </div>
+    <div>
+		<h3 class = "Underskrift"> En organisasjon for distribuering av overflødig mat </h3>
+    </div>
+    
+    <div class = "navbar">
+		<a href = "Snowball.html" target = "_self">Hjem</a>
+		<a class = "active" href = "BRUKER.html" target = "_self">Registrer Mat</a>
+		<a href = "omoss.html" target = "_self">Om Oss</a>
+    </div>
+
+    
+
+
+<h2>REGISTRER EN BRUKER:</h2>
+
+<script src="https://www.gstatic.com/firebasejs/3.6.9/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyCjruSxkD8hohfAqkX8hr5-SiJTzDbz_Bk",
+    authDomain: "bruker-9d1a3.firebaseapp.com",
+    databaseURL: "https://bruker-9d1a3.firebaseio.com",
+    storageBucket: "bruker-9d1a3.appspot.com",
+    messagingSenderId: "1088589553621"
+  };
+  firebase.initializeApp(config);
+</script>
+
+<!-- Tabellene i firebase kobles mot javascript -->
+<script type="text/javascript">
+	var tekstDatabase = firebase.database();
+	var filDatabase  = firebase.storage();
+	var Bruker = tekstDatabase.ref("Bruker");     //Bytt ut tabell1 og tabell2 med navn
+</script>
+
+<!-- LAG et skjema med data.  Her kan brukeren taste inn forskjellige data -->
+<form id="regBruker">
+	<textarea id="inpBrukernavn" required placeholder="Skriv inn hva du vil gi bort her:"></textarea>
+	<textarea  id="inpNavn" required placeholder="Skriv inn navnet på organisasjonen her:"></textarea>
+	<textarea id="inpAddresse" required placeholder="Skriv inn hvor mye her:"></textarea>
+	<button style="border: 2px solid black; background-color: white; color: black" class="button" type="submit">Godkjenn</button>
+</form>
+<!-- Tilhørende javascript blir slik:  -->
+<script type="text/javascript">
+	var regBruker = document.getElementById('regBruker');
+	var inpNavn 		= document.getElementById('inpNavn');
+	var inpBrukernavn = document.getElementById('inpBrukernavn');
+	var inpAddresse = document.getElementById('inpAddresse');
+	var inpNummer = document.getElementById('inpNummer');
+	function leggTilData_i_Firebase(evt) {
+		evt.preventDefault();
+			Bruker.push({
+				Navn:inpNavn.value,
+				Brukernavn:inpBrukernavn.value,
+				Adresse:inpAddresse.value,
+				Nummer:inpNummer.value,
+				url:globalUrl
+			});
+	}
+	regBruker.addEventListener("submit",leggTilData_i_Firebase);
+</script>
+
+<!-- Sett inn et bilde i fil-databasen (storage) til firebase -->
+<input type="file" id="inpBilde"></input>
+<progress value="0" max = "100" id="opplastingsProsent">0%</progress>
+<img style="margin-left: 40px" id="bilde" src="" width="125px" alt="ØNSKET BILDE">
+<!-- Tilhørende javascript blir slik:  -->
+<script>
+	var inpBilde  = document.getElementById('inpBilde');
+	var bilde  = document.getElementById('bilde');
+	var opplastingsProsent = document.getElementById('opplastingsProsent');
+	var globalUrl = "";		
+	function leggTilBilde(evt) {
+		var file = evt.target.files[0];
+		var bilder = filDatabase.ref("bilder/" + file.name);
+		var mensBildeLastesNed = bilder.put(file);
+		mensBildeLastesNed.on("state_changed",
+			function progress(snapshot) {
+				var prosent=(snapshot.bytesTransferred/snapshot.totalBytes)*100;
+				opplastingsProsent.value = prosent;
+			},
+			function error(err){
+				alert("Noe hendte - filen kan ikke lastes opp...");
+			},
+			function complete() {
+				bilder.getDownloadURL().then(function(url){
+										globalUrl=url;
+										bilde.src=url
+									});					
+			}
+		);
+	}
+	inpBilde.addEventListener("change", leggTilBilde);
+</script>
+
+
+<!-- LAG en tabell som presenterer data fra Firebase-databasen -->
+<table>
+	<tbody id="tbUtdata">
+	</tbody>
+</table>
+<!-- Tilhørende javascript blir slik:  -->
+<script type="text/javascript">
+	var tbUtdata = document.getElementById('tbUtdata');
+	function visData(snapshot) {
+		var detteDatabaseFeltet = snapshot.val();
+		tbUtdata.innerHTML += `<tr><td>${detteDatabaseFeltet.Navn}</td>
+								   <td>${detteDatabaseFeltet.Brukernavn}</td>
+								   <td>${detteDatabaseFeltet.Adresse}</td>
+								   <td>${detteDatabaseFeltet.Nummer}</td>
+								   <td><img width="40px" src="${detteDatabaseFeltet.url}"<td></tr>`;
+	}
+	Bruker.on("child_added", visData);
+</script>
+</body>
+</html>
